@@ -16,6 +16,10 @@ const UserSchema = new Schema(
       required: [true, "User Name is required."],
       unique: [true, "Username already registered."]
     },
+    _company_id: {
+      type: Schema.Types.ObjectId,
+      ref: "company"
+    },
     role: { type: String, required: [true, "Role is required."] },
     phone: { type: String },
     active: { type: Boolean, default: true },
