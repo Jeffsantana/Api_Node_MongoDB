@@ -122,7 +122,7 @@ const UserController = dependencies => {
         return res.status(400).send({ message: await validateError(error) });
       }
     } else {
-      return res.status(400).send({
+      return res.status(401).send({
         message: "You dont have permission to access this information"
       });
     }
@@ -233,15 +233,18 @@ const UserController = dependencies => {
             const message = "Max size file: "
               .concat(env.MAX_FILE_SIZE_MB)
               .concat(" MB.");
-            return res.status(400).send({ message });
+            return res.status(401).send({ message });
           }
           if (!req.file) {
             const message = "The file was not selected";
-            return res.status(400).send({ message });
+            return res.status(401).send({ message });
           }
           const image = {
-            filename: req.file.filename,
-            url: "/uploads/img-users/".concat(req.file.filename),
+            filename: _id,
+            url: "/uploads/img-users/"
+              .concat(_id)
+              .concat(".")
+              .concat(req.file.mimetype.split("/")[1]),
             type: req.file.mimetype
           };
           const user = await User.findByIdAndUpdate(
@@ -249,7 +252,11 @@ const UserController = dependencies => {
             { $set: { image } },
             { new: true }
           );
-          return res.status(200).send({ message: "Image Upload to:", user });
+          console.log("user:");
+          console.log(user);
+          if (user) {
+            return res.status(200).send({ message: "Image Upload to:", user });
+          }
         } catch (error) {
           return res.status(400).send({ message: await validateError(error) });
         }
