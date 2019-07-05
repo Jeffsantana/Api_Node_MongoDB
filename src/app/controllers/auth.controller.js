@@ -23,17 +23,15 @@ const AuthController = dependencies => {
       }
     } catch (error) {
       let { message } = error;
-      console.log(message);
       message = message.split(":");
       let index = message.length - 3;
-      console.log(message);
+
       message = message[index];
       return res.status(400).send({ message: message });
     }
   });
   // Login
   router.post("/login", async (req, res) => {
-    console.log(req.body);
     try {
       const { email, password } = req.body;
       let user = await User.findOne({ email }).select("+password");
@@ -76,7 +74,6 @@ const AuthController = dependencies => {
       else
         return res.status(200).send(`<h2> API OK </h2> <h3> SGBD: BAD </h3>`);
     } catch (error) {
-      console.log(error);
       return res.status(400).send({ error: { message: "BAD REQUEST" } });
     }
   });
