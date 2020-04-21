@@ -4,3 +4,4 @@ uploads
 .vscode
 .env
 .eslintrc
+yarn-error.log
